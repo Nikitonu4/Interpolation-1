@@ -62,7 +62,6 @@ exports.watching = watching;
 exports.browsersync = browsersync;
 exports.scripts = scripts;
 exports.cleanDist = cleanDist;
-exports.lintJS = lintJS;
 
 exports.default = parallel(styles, scripts, browsersync, watching); // при запуске gulp 
 
