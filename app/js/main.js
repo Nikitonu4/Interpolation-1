@@ -1,134 +1,51 @@
-ready(function() {
-    initializeBackground();
+let button = document.querySelector(".button");
+var ctx = document.getElementById('myChart').getContext('2d');
+
+var myRadarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+        labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+        datasets: [{
+            data: [20, 10, 4, 2]
+        }]
+    },
+    options: {
+        scale: {
+            angleLines: {
+                display: false
+            },
+            ticks: {
+                suggestedMin: 50,
+                suggestedMax: 100
+            }
+        }
+    }
 });
 
-var resizeTimeout;
-var resizeCooldown = 500;
-var lastResizeTime = Date.now();
-function initializeBackground() {
-    canvas = document.getElementById("stars");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    window.addEventListener("resize", function() {
-        if (Date.now() - lastResizeTime < resizeCooldown && resizeTimeout) {
-            clearTimeout(resizeTimeout);
-            delete resizeTimeout;
-        }
 
-        lastResizeTime = Date.now();
-        canvas.style.display = "none";
-        resizeTimeout = setTimeout(function() {
-            fadeIn(canvas, 500);
-            initializeStars();
-        }, 500);
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-    initializeStars();
-    (window.requestAnimationFrame && requestAnimationFrame(paintLoop)) ||
-    setTimeout(paintLoop, ms);
-}
+button.addEventListener("click", function() {
 
-var canvas;
-var stars = [];
+    //берем параметры функции и окна
+    let alpha = document.querySelector("#alpha").value;
+    let beta = document.querySelector("#beta").value;
+    let gamma = document.querySelector("#gamma").value;
+    let delta = document.querySelector("#delta").value;
+    let A = document.querySelector("#A").value;
+    let B = document.querySelector("#B").value;
+    let C = document.querySelector("#C").value;
+    let D = document.querySelector("#D").value;
+    let n = document.querySelector("#n").value;
 
-function rand(max) {
-    return Math.random() * max;
-}
+    let perX = w/(+B-+A);
+    let perY = h/(+D-+C);
 
-function Star(canvas, size, speed) {
-    this.ctx = canvas.getContext("2d");
-    this.size = size;
-    this.speed = speed;
-    this.x = rand(window.innerWidth);
-    this.y = rand(window.innerHeight);
-}
+    //берем чеки
+    let f = document.querySelector("#f");
+    let p = document.querySelector("#p");
+    let r = document.querySelector("#r");
+    let df = document.querySelector("#df");
+    let dp = document.querySelector("#dp");
 
-Star.prototype.animate = function(delta) {
-    this.x += this.speed * delta;
-    this.y -= this.speed * delta;
-    if (this.y < 0) {
-        this.y = window.innerHeight;
-    }
-    if (this.x > window.innerWidth) {
-        this.x = 0;
-    }
-    this.ctx.fillStyle = "#ffffff";
-    this.ctx.fillRect(this.x, this.y, this.size, this.size);
-};
+});
 
-function initializeStars() {
-    var winArea = window.innerWidth * window.innerHeight;
-    var smallStarsDensity = 0.0001;
-    var mediumStarsDensity = 0.00005;
-    var largeStarsDensity = 0.00002;
-    var smallStarsCount = winArea * smallStarsDensity;
-    var mediumStarsCount = winArea * mediumStarsDensity;
-    var largeStarsCount = winArea * largeStarsDensity;
-    stars = [];
-    for (var i = 0; i < smallStarsCount; i++) {
-        stars.push(new Star(canvas, 1, 30));
-    }
 
-    for (var i = 0; i < mediumStarsCount; i++) {
-        stars.push(new Star(canvas, 2, 20));
-    }
-
-    for (var i = 0; i < largeStarsCount; i++) {
-        stars.push(new Star(canvas, 3, 10));
-    }
-}
-
-function drawStars(delta) {
-    for (var i = 0; i < stars.length; i++) {
-        stars[i].animate(delta);
-    }
-}
-
-var ms = 16;
-var lastPaintTime = 0;
-function paintLoop(timestamp) {
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    var delta =
-        (window.requestAnimationFrame ? timestamp - lastPaintTime : ms) / 1000;
-    if(delta > 0.05){
-        delta = 0.05;
-    }
-    drawStars(delta);
-    (window.requestAnimationFrame && requestAnimationFrame(paintLoop)) ||
-    setTimeout(paintLoop, ms);
-    lastPaintTime = timestamp;
-}
-
-function fadeIn(element, duration, callback) {
-    element.style.opacity = 0;
-    element.style.display = "block";
-
-    var startTime = Date.now();
-    var tick = function() {
-        var newOpacity = (Date.now() - startTime) / duration;
-        if (newOpacity > 1) {
-            newOpacity = 1;
-            callback && callback();
-        } else {
-            (window.requestAnimationFrame && requestAnimationFrame(tick)) ||
-            setTimeout(tick, 16);
-        }
-
-        element.style.opacity = newOpacity;
-    };
-    tick();
-}
-
-//http://youmightnotneedjquery.com/
-function ready(fn) {
-    if (
-        document.attachEvent
-            ? document.readyState === "complete"
-            : document.readyState !== "loading"
-    ) {
-        fn();
-    } else {
-        document.addEventListener("DOMContentLoaded", fn);
-    }
-}

@@ -26,18 +26,18 @@
       <div class="flex-container">
         <form class = "form" action="">
           <p>Параметры функции:</p>
-          <div class="input-name"><p>α</p><input id="alpha" type="text"></div>
-          <div class="input-name"><p>β</p><input id="beta" type="text"></div>
-          <div class="input-name"><p>γ</p><input id="gamma" type="text"></div>
-          <div class="input-name"><p>δ</p><input id="delta" type="text"></div>
+          <div class="input-name"><p>α</p><input id="alpha" type="text" value="2"></div>
+          <div class="input-name"><p>β</p><input id="beta" type="text" value="2"></div>
+          <div class="input-name"><p>γ</p><input id="gamma" type="text" value="2"></div>
+          <div class="input-name"><p>δ</p><input id="delta" type="text" value="2"></div>
           <p>Размер по горизонтали:</p>
-          <div class="input-name"><p>A</p><input id="A" type="text"></div>
-          <div class="input-name"><p>B</p><input id="B" type="text"></div>
+          <div class="input-name"><p>A</p><input id="A" type="text" value="2"></div>
+          <div class="input-name"><p>B</p><input id="B" type="text" value="2"></div>
           <p>Размер по вертикали:</p>
-          <div class="input-name"><p>C</p><input id="C" type="text"></div>
-          <div class="input-name"><p>D</p><input id="D" type="text"></div>
+          <div class="input-name"><p>C</p><input id="C" type="text" value="2"></div>
+          <div class="input-name"><p>D</p><input id="D" type="text" value="2"></div>
           <p>Число узлов интерполяции:</p>
-          <div class="input-name"><p>n</p><input id="n" type="text"></div>
+          <div class="input-name"><p>n</p><input id="n" type="text" value="2"></div>
           <div class="input-name">
             <p>Δ</p>
             <select>
@@ -51,6 +51,9 @@
             Построить график!
           </button>
         </form>
+        <div class="graph">
+          <canvas id="myChart" width="600" height="400"></canvas>
+        </div>
         <div class="checkboxes">
           <div class="check-name"><p>f(x)</p><input type="checkbox" checked></div>
           <div class="check-name"><p>P<sub>n</sub>(x)</p><input type="checkbox" checked></div>
@@ -59,8 +62,6 @@
           <div class="check-name"><p>∂P</p><input type="checkbox"></div>
         </div>
       </div>
-
-    <div class="graph"></div>
     </div>
   </section>
   <script src="js/main.min.js"></script>

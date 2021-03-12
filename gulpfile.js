@@ -6,11 +6,15 @@ const {src, dest, watch, parallel, series} = require('gulp'),
     autopefixer = require('gulp-autoprefixer'); // для поддержки старыми браузерами 
 del = require('del');
 
+
 function scripts(){ // работа с js файлами
     return src([
         'node_modules/jquery/dist/jquery.js', //выбираем jquery библиотеку
-        'app/js/main.js' // выбираем основной файл main.js
-  ])
+        'node_modules/chart.js/dist/Chart.min.js',
+        'app/js/main.js', // выбираем основной файл main.js
+        'app/js/bgSky.js' // выбираем js для фона
+         // выбираем js для фона
+    ])
   .pipe(concat('main.min.js')) // переименовывем файл в min.js
   .pipe(uglify()) // минифицируем 
   .pipe(dest('app/js')) //переносим в app/js
