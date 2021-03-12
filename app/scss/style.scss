@@ -13,12 +13,74 @@
   background: radial-gradient(at bottom right, #32577a 25%, #05363b 55%, #000000 90%);
 }
 
+.container {
+  max-width: 1170px;
+  margin: 0 auto;
+}
+
 .header {
   text-align: center;
-  margin-top: 40px;
-  h2{
+  margin-top: 20px;
+
+  h2 {
     margin-top: 30px;
   }
 }
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form {
+  margin-top: 5px;
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  .input-name {
+    margin-bottom: 10px;
+
+    p {
+      display: inline-block;
+      width: 20px;
+    }
+
+    input {
+      padding-left: 10px;
+      margin-left: 10px;
+      width: 130px;
+      border-radius: 15px;
+      height: 23px;
+    }
+    select {
+      margin-left: 5px;
+      width: 133px;
+      border-radius: 15px;
+      height: 23px;
+    }
+  }
+  .button{
+    border-radius: 15px;
+    height: 23px;
+    width: 100%;
+  }
+}
+
+.check-name {
+  margin-bottom: 10px;
+  p {
+    font-size: 20px;
+    display: inline-block;
+    width: 10px;
+  }
+
+  input {
+    width: 100px;
+  }
+}
+
 
 
