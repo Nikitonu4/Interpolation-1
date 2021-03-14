@@ -4,19 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Интерполяция полинома</title>
+  <title>Интерполяция функции</title>
   <link rel="stylesheet" href="css/style.min.css">
 </head>
 
 <body>
-<div id="background">
-  <canvas id="stars"></canvas>
-</div>
+  <div id="background">
+    <canvas id="stars"></canvas>
+  </div>
 
   <header class="header">
     <div class="container">
       <h1>Интерполирование функции методом Стирлинга</h1>
-      <h2>α*sin(β/((x-γ)^2)*cos(δx)</h2>
+      <h2>α*sin(β/((x-γ)^2))*cos(δx)</h2>
       <h2>Батогов Никита ИВТ-31БО</h2>
     </div>
 
@@ -24,23 +24,41 @@
   <section class="main">
     <div class="container">
       <div class="flex-container">
-        <form class = "form" action="">
+        <form class="form" action="">
           <p>Параметры функции:</p>
-          <div class="input-name"><p>α</p><input id="alpha" type="text" value="2"></div>
-          <div class="input-name"><p>β</p><input id="beta" type="text" value="2"></div>
-          <div class="input-name"><p>γ</p><input id="gamma" type="text" value="2"></div>
-          <div class="input-name"><p>δ</p><input id="delta" type="text" value="2"></div>
+          <div class="input-name">
+            <p>α</p><input id="alpha" type="text" value="6">
+          </div>
+          <div class="input-name">
+            <p>β</p><input id="beta" type="text" value="5">
+          </div>
+          <div class="input-name">
+            <p>γ</p><input id="gamma" type="text" value="4">
+          </div>
+          <div class="input-name">
+            <p>δ</p><input id="delta" type="text" value="4">
+          </div>
           <p>Размер по горизонтали:</p>
-          <div class="input-name"><p>A</p><input id="A" type="text" value="2"></div>
-          <div class="input-name"><p>B</p><input id="B" type="text" value="2"></div>
+          <div class="input-name">
+            <p>A</p><input id="A" type="text" value="2">
+          </div>
+          <div class="input-name">
+            <p>B</p><input id="B" type="text" value="7">
+          </div>
           <p>Размер по вертикали:</p>
-          <div class="input-name"><p>C</p><input id="C" type="text" value="2"></div>
-          <div class="input-name"><p>D</p><input id="D" type="text" value="2"></div>
+          <div class="input-name">
+            <p>C</p><input id="C" type="text" value="-6">
+          </div>
+          <div class="input-name">
+            <p>D</p><input id="D" type="text" value="6">
+          </div>
           <p>Число узлов интерполяции:</p>
-          <div class="input-name"><p>n</p><input id="n" type="text" value="2"></div>
+          <div class="input-name">
+            <p>n</p><input id="n" type="text" value="10">
+          </div>
           <div class="input-name">
             <p>Δ</p>
-            <select>
+            <select id="del">
               <option>0.1</option>
               <option>0.01</option>
               <option>0.001</option>
@@ -52,14 +70,24 @@
           </button>
         </form>
         <div class="graph">
-          <canvas id="myChart" width="600" height="400"></canvas>
+          <canvas id="myChart" width="700" height="400"></canvas>
         </div>
         <div class="checkboxes">
-          <div class="check-name"><p>f(x)</p><input type="checkbox" checked></div>
-          <div class="check-name"><p>P<sub>n</sub>(x)</p><input type="checkbox" checked></div>
-          <div class="check-name"><p>r<sub>n</sub>(x)</p><input type="checkbox"></div>
-          <div class="check-name"><p>∂f(x)</p><input type="checkbox"></div>
-          <div class="check-name"><p>∂P</p><input type="checkbox"></div>
+          <div class="check-name">
+            <p>f(x)</p><input id="f" type="checkbox" checked>
+          </div>
+          <div class="check-name">
+            <p>P<sub>n</sub>(x)</p><input id="p" type="checkbox">
+          </div>
+          <div class="check-name">
+            <p>r<sub>n</sub>(x)</p><input id="r" type="checkbox">
+          </div>
+          <div class="check-name">
+            <p>∂f(x)</p><input id="df" type="checkbox">
+          </div>
+          <div class="check-name">
+            <p>∂P</p><input id="dp" type="checkbox">
+          </div>
         </div>
       </div>
     </div>
