@@ -1,12 +1,10 @@
-"use struct;"
-// function alpha*Math.sin(beta/Math.pow((x-gamma),2))*Math.cos(delta*x)
-
+// "use struct;"
 let button = document.querySelector(".button");
 
 let w = document.getElementById('myChart').width;
 let h = document.getElementById('myChart').height;
 
-let mat;
+let matr;
 
 let ctx = newChart();
 
@@ -18,11 +16,43 @@ function newChart(minY, maxY){
          datasets: [{
            label: 'f(x)', //Метка
            data: [], //Данные
-           borderColor: "#d79e50", //Цвет
+           borderColor: "#000", //Цвет
            borderWidth: 1, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
-          }]
+          },
+          {
+            label: 'Pn(x)', //Метка
+           data: [], //Данные
+           borderColor: "#01b4bc", //Цвет
+           borderWidth: 1, //Толщина линии
+           fill: false, //Не заполнять под графиком
+           pointRadius: 0,
+        },
+        {
+            label: 'df(x)', //Метка
+           data: [], //Данные
+           borderColor: "#5fa55a", //Цвет
+           borderWidth: 1, //Толщина линии
+           fill: false, //Не заполнять под графиком
+           pointRadius: 0,
+        },
+        {
+            label: 'dPn(x)', //Метка
+           data: [], //Данные
+           borderColor: "#fa8925", //Цвет
+           borderWidth: 1, //Толщина линии
+           fill: false, //Не заполнять под графиком
+           pointRadius: 0,
+        },
+        {
+            label: 'Rn(x)', //Метка
+           data: [], //Данные
+           borderColor: "#fa5457", //Цвет
+           borderWidth: 1, //Толщина линии
+           fill: false, //Не заполнять под графиком
+           pointRadius: 0,
+        }]
         },
         options: {
          responsive: false, //Вписывать в размер canvas
@@ -40,17 +70,7 @@ function newChart(minY, maxY){
           }
         }],
          },
-         animation: {
-            duration: 1500,
-            easing: 'linear',
-            tension: {
-                duration: 1000,
-                easing: 'linear',
-                from: 1,
-                to: 0,
-                loop: true,
-            }
-        },
+        
         }
        })
 }
@@ -74,46 +94,42 @@ function click(){
     let n = +document.querySelector("#n").value;
     let del = +document.querySelector("#del").value;
 
-    let perX = w/(+B - +A); // масштаб по x
-    let perY = h/(+D - +C); // масштаб по y
+    let perX = w/(B - A); // масштаб по x
+    let perY = h/(D - C); // масштаб по y
 
-    //берем чеки
-    let f = document.querySelector("#f");
-    let p = document.querySelector("#p");
-    let r = document.querySelector("#r");
-    let df = document.querySelector("#df");
-    let dp = document.querySelector("#dp");
+    let hh = (B-A)/n;
 
-    let hh = (B - A) / n;
-
-    mat = matrix(n + 1, n + 1);
+    matr = matrix(n+1, n+1);
     table(hh, n, A, B, C, D, perX, perY, alpha, beta, gamma, delta);
 
-    if(f.checked){
-        printf(A, B, C, D, perX, perY, alpha, beta, gamma, delta);
+    printf(A, B, C, D, perX, perY, alpha, beta, gamma, delta);
+    printp(A, B, C, D, perX, perY, alpha, beta, gamma, delta, n, hh);
+    ctx.data.datasets[2].hidden = true;
+    ctx.data.datasets[3].hidden = true;
+    ctx.data.datasets[4].hidden = true;
+    ctx.update();
+    printdf(A, B, C, D, perX, perY, alpha, beta, gamma, delta, del);
+    printdp(A, B, C, D, perX, perY, alpha, beta, gamma, delta, hh, n, del);
+    printr(A, B, C, D, perX, perY, alpha, beta, gamma, delta,  hh, n)
     }
 
-    if(p.checked){
-        printp(A, B, C, D, perX, perY, alpha, beta, gamma, delta, n);
-    }
-    //
-    // if(r.checked){
-    //     printr(A, B, C, D, perX, perY, alpha, beta, gamma, delta, hh, n);
-    // }
-    //
-    // if(df.checked){
-    //     printdf(A, B, C, D, perX, perY, alpha, beta, gamma, delta,  hh, n, del);
-    // }
-    //
-    // if(dp.checked){
-    //     printdp(A, B, C, D, perX, perY, alpha, beta, gamma, delta,  hh, n, del);
-    // }
+//полином
+function pol(t, k, n) {
+    if (k < n)
+        return (pol(t, k + 1, n) + (fac(t, k) * matr[0][k]));
+    return fac(t, k) * matr[0][k];
 }
 
-// создание матрицы из нулей
+//коэффициент при дельта^k(y0)
+function fac(t, k) {
+    if (k == 0)
+        return 1;
+    return t / k * fac(t-1, k - 1);
+}
+
+//создание матрицы
 function matrix(rows, columns){
     let arr = [];
-
     for (let i=0; i < rows; i++){
         arr[i] = [];
         for (let j=0; j < columns; j++){
@@ -125,54 +141,63 @@ function matrix(rows, columns){
 
 //создание таблицы конечных разностей
 function table(hh, n, A, B, C, D, perX, perY, alpha, beta, gamma, delta) {
-//первый столбец (func(x))
     for (let x = A, i = 0; i <= n; x += hh, i++) {
-        // mat[i][0] = alpha*Math.sin(beta/Math.pow((x-gamma),2))*Math.cos(delta*x);
-        mat[i][0] = Math.cos(delta*x);
+        matr[i][0] =  f(x, alpha, beta, gamma, delta)
     }
 
-    for(let j=1; j<=n; j++){
-        for(let i=0; i<=(n-j); i++){
-            mat[i][j]=mat[i+1][j-1]-mat[i][j-1];
-        }
+  for(let j=1; j<=n; j++){
+    for(let i=0; i<=(n-j); i++){
+      matr[i][j]=matr[i+1][j-1]-matr[i][j-1];
     }
+  }
 }
 
-//печать функции
 function printf(A, B, C, D, perX, perY, alpha, beta, gamma, delta){
     ctx.destroy();
     ctx = newChart(C, D);
-
-    for (let x = A; x <= B; x +=0.1/perX) { //0.1 - шаг
+    for (let x = A; x <= B; x += (B-A)/1000) { 
         ctx.data.labels.push(''+x.toFixed(2));
         ctx.data.datasets[0].data.push(f(x, alpha, beta, gamma, delta).toFixed(2));
-
     }
     ctx.update();
-
-
 }
 
-function printp(A, B, C, D, perX, perY, alfa, betta, gamma, delta, n) {
-
-    hh = (Number(B)-Number(A))/Number(n);
-
-    let s = floor(n / 2); 
-
-
-    ctx.moveTo(Math.round(- Number(A) * perX + x * perX), Math.round(Number(D) * perY - pol((x - Number(A)) / hh, 0, n) * perY));
-    for (let x = A; x <= B; x +=0.1/perX) {
-        ctx.lineTo(Math.round(- Number(A) * perX + x * perX), Math.round(Number(D) * perY - pol((x - Number(A)) / hh, 0, n) * perY), 1, 1);
+// печать полинома
+function printp(A, B, C, D, perX, perY, alpha, beta, gamma, delta, n, hh) {
+    for (let x = A; x <= B; x += (B-A)/1000) {
+        ctx.data.datasets[1].data.push(pol((x - A) / hh, 0, n).toFixed(2));
     }
-
-    ctx.stroke();
+    ctx.update();
 }
 
+function printdf(A, B, C, D, perX, perY, alpha, beta, gamma, delta, del) {
+    for (let x = A; x <= B; x +=(B-A)/1000) { 
+        let y = f(x, alpha, beta, gamma, delta); 
+        let s = f(x+del, alpha, beta, gamma, delta); 
+        ctx.data.datasets[2].data.push(((s-y)/del).toFixed(2));
+    }
+    ctx.update();
+}
+
+function printdp(A, B, C, D, perX, perY, alpha, beta, gamma, delta, hh, n, del) {
+    for (let x = A; x <= B; x += (B-A)/1000) {
+        let y = pol((x - A) / hh, 0, n)
+        let s = pol((x + del - A) / hh, 0, n)
+        ctx.data.datasets[3].data.push(((s-y)/del).toFixed(2));
+    }
+    ctx.update();
+}
+
+function printr(A, B, C, D, perX, perY, alpha, beta, gamma, delta,  hh, n) {
+    for (let x = A; x <= B; x += (B-A)/1000) {
+        let y = f(x, alpha, beta, gamma, delta); 
+        ctx.data.datasets[4].data.push(y-pol((x - A) / hh, 0, n).toFixed(2));
+    }
+    ctx.update();
+}
 
 function f(x, alpha, beta, gamma, delta) { //Вычисление нужной функции
-    return alpha*Math.sin(beta/Math.pow((x-gamma),2))*Math.cos(delta*x);
+    return alpha * (Math.sin(beta/Math.pow((x-gamma),2))) * Math.cos(delta*x);
+    // return Math.sin(x);
+    // return alpha * Math.sin(beta * x) * Math.cos(Math.tan((gamma / (x - delta))));
 }
-
-
-
-
