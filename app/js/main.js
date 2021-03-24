@@ -13,27 +13,28 @@ function newChart(minY, maxY){
         type: 'line',
         data: {
          labels: [], //Подписи оси x
-         datasets: [{
-           label: 'f(x)', //Метка
-           data: [], //Данные
-           borderColor: "#000", //Цвет
-           borderWidth: 1, //Толщина линии
-           fill: false, //Не заполнять под графиком
-           pointRadius: 0,
-          },
+         datasets: [
           {
             label: 'Pn(x)', //Метка
            data: [], //Данные
            borderColor: "#01b4bc", //Цвет
-           borderWidth: 1, //Толщина линии
+           borderWidth: 1.2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         },
         {
+           label: 'f(x)', //Метка
+           data: [], //Данные
+           borderColor: "#000", //Цвет
+           borderWidth: 1.2, //Толщина линии
+           fill: false, //Не заполнять под графиком
+           pointRadius: 0,
+          },
+        {
             label: 'df(x)', //Метка
            data: [], //Данные
            borderColor: "#5fa55a", //Цвет
-           borderWidth: 1, //Толщина линии
+           borderWidth: 1.2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         },
@@ -41,7 +42,7 @@ function newChart(minY, maxY){
             label: 'dPn(x)', //Метка
            data: [], //Данные
            borderColor: "#fa8925", //Цвет
-           borderWidth: 1, //Толщина линии
+           borderWidth: 1.2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         },
@@ -49,7 +50,7 @@ function newChart(minY, maxY){
             label: 'Rn(x)', //Метка
            data: [], //Данные
            borderColor: "#fa5457", //Цвет
-           borderWidth: 1, //Толщина линии
+           borderWidth: 1.2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         }]
@@ -94,6 +95,18 @@ function click(){
     let n = +document.querySelector("#n").value;
     let del = +document.querySelector("#del").value;
 
+    if(B<=A){
+        alert('B должно быть больше A')
+        return;
+    }
+    if(C>=D){
+        alert('D должно быть больше C')
+        return;
+    }
+    if(n<1){
+        alert('Количество узлов должно быть больше 1')
+        return;
+    }
     let perX = w/(B - A); // масштаб по x
     let perY = h/(D - C); // масштаб по y
 
@@ -120,7 +133,7 @@ function pol(t, k, n) {
     return fac(t, k) * matr[0][k];
 }
 
-//коэффициент при дельта^k(y0)
+//факториал
 function fac(t, k) {
     if (k == 0)
         return 1;
@@ -157,15 +170,14 @@ function printf(A, B, C, D, perX, perY, alpha, beta, gamma, delta){
     ctx = newChart(C, D);
     for (let x = A; x <= B; x += (B-A)/1000) { 
         ctx.data.labels.push(''+x.toFixed(2));
-        ctx.data.datasets[0].data.push(f(x, alpha, beta, gamma, delta).toFixed(2));
+        ctx.data.datasets[1].data.push(f(x, alpha, beta, gamma, delta).toFixed(2));
     }
     ctx.update();
 }
 
-// печать полинома
 function printp(A, B, C, D, perX, perY, alpha, beta, gamma, delta, n, hh) {
     for (let x = A; x <= B; x += (B-A)/1000) {
-        ctx.data.datasets[1].data.push(pol((x - A) / hh, 0, n).toFixed(2));
+        ctx.data.datasets[0].data.push(pol((x - A) / hh, 0, n).toFixed(2));
     }
     ctx.update();
 }
@@ -189,15 +201,38 @@ function printdp(A, B, C, D, perX, perY, alpha, beta, gamma, delta, hh, n, del) 
 }
 
 function printr(A, B, C, D, perX, perY, alpha, beta, gamma, delta,  hh, n) {
+    let max = 0;
+    let dot = 0;
     for (let x = A; x <= B; x += (B-A)/1000) {
         let y = f(x, alpha, beta, gamma, delta); 
-        ctx.data.datasets[4].data.push(y-pol((x - A) / hh, 0, n).toFixed(2));
+        let r = y-pol((x - A) / hh, 0, n);
+        ctx.data.datasets[4].data.push(r.toFixed(2));
+        if(max < Math.abs(r)){
+            max = Math.abs(r);
+            dot = x;
+        }
     }
+    document.querySelector('.max').textContent = `max |Rn(x)|: ${dot.toFixed(2)}`;
+
     ctx.update();
 }
 
 function f(x, alpha, beta, gamma, delta) { //Вычисление нужной функции
     return alpha * (Math.sin(beta/Math.pow((x-gamma),2))) * Math.cos(delta*x);
-    // return Math.sin(x);
-    // return alpha * Math.sin(beta * x) * Math.cos(Math.tan((gamma / (x - delta))));
 }
+
+let btnPlay = document.getElementById('play');
+let playing = false; // текущее состояние плеера
+let player = new Audio('../music/Louis Armstrong — A Kiss To Build A Dream On.mp3');
+btnPlay.addEventListener('click', playPause);
+function playPause() {
+    let controlPanelObj = document.getElementById('control-panel');
+    if( playing) {
+      player.pause();
+      controlPanelObj.classList.remove('active');
+    } else {
+      player.play();
+      controlPanelObj.classList.add('active'); 
+    }
+    playing = !playing;
+  }
