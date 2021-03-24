@@ -18,7 +18,7 @@ function newChart(minY, maxY){
             label: 'Pn(x)', //Метка
            data: [], //Данные
            borderColor: "#01b4bc", //Цвет
-           borderWidth: 1.2, //Толщина линии
+           borderWidth: 2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         },
@@ -26,7 +26,7 @@ function newChart(minY, maxY){
            label: 'f(x)', //Метка
            data: [], //Данные
            borderColor: "#000", //Цвет
-           borderWidth: 1.2, //Толщина линии
+           borderWidth: 2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
           },
@@ -34,7 +34,7 @@ function newChart(minY, maxY){
             label: 'df(x)', //Метка
            data: [], //Данные
            borderColor: "#5fa55a", //Цвет
-           borderWidth: 1.2, //Толщина линии
+           borderWidth: 2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         },
@@ -42,7 +42,7 @@ function newChart(minY, maxY){
             label: 'dPn(x)', //Метка
            data: [], //Данные
            borderColor: "#fa8925", //Цвет
-           borderWidth: 1.2, //Толщина линии
+           borderWidth:2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         },
@@ -50,7 +50,7 @@ function newChart(minY, maxY){
             label: 'Rn(x)', //Метка
            data: [], //Данные
            borderColor: "#fa5457", //Цвет
-           borderWidth: 1.2, //Толщина линии
+           borderWidth: 2, //Толщина линии
            fill: false, //Не заполнять под графиком
            pointRadius: 0,
         }]
